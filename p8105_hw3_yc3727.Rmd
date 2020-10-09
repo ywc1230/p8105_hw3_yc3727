@@ -1,0 +1,36 @@
+---
+title: "Homework 3"
+output: github_document
+---
+
+```{r setup, include = FALSE}
+
+library(tidyverse)
+library(p8105.datasets)
+library(ggridges)
+
+```
+
+### Problem 3
+
+#### Data cleaning
+```{r}
+
+data(na_noaa)
+
+ny_noaa_df = ny_noaa %>%
+          separate(date, into = c("year", "month", "day"), convert = TRUE) %>%
+        mutate(
+          year = factor(year), 
+          month = as.integer(month), 
+          day = as.integer(day),
+          prcp = as.integer(prcp),
+          tmax = as.integer(tmax), 
+          tmin = as.integer(tmin), 
+          prcp = prcp/10, 
+          tmax = tmax/10, 
+          tmin = tmin/10
+        ) 
+
+```
+
