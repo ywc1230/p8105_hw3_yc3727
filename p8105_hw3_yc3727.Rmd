@@ -1,7 +1,7 @@
 ---
 title: "Homework 3"
 name: "Chloe Chah"
-date: '`r format(Sys.time(), "%Y-%m-%d")`'
+date: "October 10, 2020"
 output: github_document
 ---
 
@@ -134,7 +134,7 @@ head(accel_df)
 
 ```
 
-The accelarator dataset contains information regarding the following variables: `r ls(accel_df)`. There are a total of `r nrow(accel_df)` rows and `r ncol(accel_df)` columns in the final dataset. 
+This dataset contains information regarding five weeks of accelerometer data collected on a 63 year-old male with BMI 25, who was admitted to the Advanced Cardiac Care Center of Columbia University Medical Center and diagnosed with congestive heart failure (CHF). The accelarator dataset contains information regarding the following variables: `r ls(accel_df)`. The key variable, activity_count, gives activity information for each minute of a 24-hour day starting at midnight. There are a total of `r nrow(accel_df)` rows and `r ncol(accel_df)` columns in the final dataset. 
 
 #### Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent? 
 
@@ -150,7 +150,7 @@ accel_df %>%
     values_from = total_activity
   ) 
 ```
-The patient seems to be most active on Fridays and the least active on Saturdays. 
+The patient seems to be more active on Fridays and the less active on Saturdays. 
 We could also argue that overall activity increases over time as the weeks go by but it is difficult to make a definitive conclusion on apparent trends without further analysis. 
 
 #### Make a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph. 
