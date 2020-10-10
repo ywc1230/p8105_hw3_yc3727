@@ -8,6 +8,19 @@ output: github_document
 library(tidyverse)
 library(p8105.datasets)
 library(ggridges)
+library(patchwork)
+library(ggplot2)
+library(hexbin)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis", 
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 
 ```
 
@@ -25,9 +38,9 @@ ny_noaa_df = ny_noaa %>%
           year = factor(year), 
           month = as.integer(month), 
           day = as.integer(day),
-          prcp = as.integer(prcp),
-          tmax = as.integer(tmax), 
-          tmin = as.integer(tmin), 
+          prcp = as.numeric(prcp),
+          tmax = as.numeric(tmax), 
+          tmin = as.numeric(tmin), 
           prcp = prcp/10, 
           tmax = tmax/10, 
           tmin = tmin/10
@@ -43,6 +56,8 @@ snow_df = ny_noaa_df %>%
           count(snow) %>%
           arrange(desc(n))
 
+head(snow_df)
+
 ```
 
 It seems like the most commonly observed values was 0 when we count the observations of the snow variable and arrange it in a descending order. 
@@ -56,7 +71,7 @@ ny_noaa_df %>%
   group_by(id, year, month) %>%
   summarize(
     avg_tmax = mean(tmax, na.rm = TRUE)) %>%
-  ggplot(aes(x = year, y = avg_tmax, group = id))+
+  ggplot(aes(x = year, y = avg_tmax, group = id, color = month))+
   geom_point(alpha = .5, size = .5) + 
   geom_path() + 
   facet_grid(.~month) +
@@ -64,20 +79,35 @@ ny_noaa_df %>%
 
 ```
 
-It seems like the average maximum temperature is generally much higher in July than in January, which makes sense as they are in different seasons. 
+It seems like the average maximum temperature is generally much higher in July than in January over all the weather stations, which makes sense as they are in different seasons. There seems to be outliers in January of 1982 and July of 1988. 
 
-#### Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option); 
-
-```{r}
-
-
-
-```
-
-#### (ii) Make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
+#### Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option). (ii) Make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.; 
 
 ```{r}
 
+tmax_tmin = ny_noaa_df %>%
+            ggplot(aes(x = as.numeric(tmax), y = as.numeric(tmin))) +
+            geom_hex() + 
+            labs(
+              x = "Maximum temperature (C)", 
+              y = "Minimum temperature (C)"
+            )+ 
+            theme(legend.position = "none")
+
+snow_dist = ny_noaa_df %>%
+            filter(snow > 0 & snow <100) %>%
+            ggplot(aes(x = year, y = snow, color = year)) + 
+            geom_violin(alpha = .5) + 
+            theme(axis.text.x = element_text(angle = 270, vjust = .5, hjust = 1)) + 
+            theme(legend.position = "none") + 
+            labs(
+              x = "Year", 
+              y = "Snowfall (mm)"
+            )
+
+tmax_tmin + snow_dist 
 
 ```
+
+
 
