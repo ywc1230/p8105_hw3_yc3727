@@ -37,6 +37,9 @@ knitr::opts_chunk$set(
 
 ```{r}
 data("instacart")
+
+head(instacart)
+summary(instacart)
 ```
 
 This dataset contains `r nrow(instacart)` rows and `r ncol(instacart)` columns. 
@@ -51,9 +54,9 @@ instacart %>%
   arrange(desc(n))
 ```
 
-It seems like the top 3 aisles where the most items are ordered from are "fresh vegetables", "fresh fruits", and "packaged vegetable fruits". 
+There are 134 aisles in the dataset and it seems like the top 3 aisles where the most items are ordered from are "fresh vegetables", "fresh fruits", and "packaged vegetable fruits". 
 
-#### MMake a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. Arrange aisles sensibly, and organize your plot so others can read it.
+#### Make a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. Arrange aisles sensibly, and organize your plot so others can read it.
 
 ```{r}
 instacart %>%
