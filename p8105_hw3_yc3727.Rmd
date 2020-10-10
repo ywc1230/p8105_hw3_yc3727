@@ -138,11 +138,15 @@ The accelarator dataset contains information regarding the following variables: 
 
 ```{r}
 accel_df %>%
-  group_by(week, day_id) %>%
+  mutate(day = as.factor(day)) %>%
+  group_by(week, day) %>%
   summarize(
     total_activity = sum(activity_count)
   ) %>%
-  knitr::kable()
+  pivot_wider(
+    names_from = day, 
+    values_from = total_activity
+  ) 
 ```
 
 The patient seems to be most active on Fridays and the least active on Saturdays. 
@@ -152,10 +156,10 @@ The patient seems to be most active on Fridays and the least active on Saturdays
 ```{r}
 accel_df %>%
 ggplot(aes(x = minutes, y = activity_count, color = day)) +
-  geom_line()
+  geom_line(alpha = .5) 
 ```
 
-Based on the graph, it seems like the patient is more active during the day on Sundays and more active in the evening on Fridays. A noticeable trend is that the time at which the patient is more active seems to depend on which day of the week it is. 
+Based on the graph, in general, the patient seems to be more active on the weekends as the most noticeably high activity counts were observed on Friday, Saturday, and Sunday. Overall, the patient seems to be more active in the morning before noon and around 7pm/8pm at night. More specifically, it seems like the patient is more active during the day on Sundays and more active in the evening on Fridays. Therefore, we can conclude that the time at which the patient is more active seems to depend on which day of the week it is and the time of the day. 
 
 ### Problem 3
 
@@ -182,6 +186,9 @@ ny_noaa_df = ny_noaa %>%
 head(ny_noaa_df)
 
 ```
+
+The NY NOAA dataset contains information from the National Oceanic and Atmospheric Association. It contains the following 5 variables for weather stations in New York state from January 1, 1981 to December 31, 2010: `r ls(ny_noaa_df)`. It contains a total of `r nrow(ny_noaa_df)` rows and `r ncol(ny_noaa_df)` columns. 
+
 
 #### For snowfall, what are the most commonly observed values? Why?
 
@@ -210,13 +217,15 @@ ny_noaa_df %>%
   geom_point(alpha = .5, size = .5) + 
   geom_path() + 
   facet_grid(.~month) +
-  theme(axis.text.x = element_text(angle = 270, vjust = .5, hjust =1))
-
-head(ny_noaa_df)
+  theme(axis.text.x = element_text(angle = 270, vjust = .5, hjust =1))+ 
+  labs(
+    x = "Year", 
+    y = "Average Max Temp (C)"
+  )
 
 ```
 
-It seems like the average maximum temperature is generally much higher in July than in January over all the weather stations, which makes sense as they are in different seasons. There seems to be outliers in January of 1982 and July of 1988. 
+It seems like the average maximum temperature is generally much higher and there is a distinct difference in the average maximum temperatue in July versus January over all the weather stations from 1981 to 2010, which makes sense as they are in different seasons. In addition, it seems like there is more variability in the temperature values in January compared to July. There seems to be outliars in January of 1982 and July of 1988. We could also say that there may be a slight increasing trend in January, which could be due to global warming.  
 
 #### Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option). (ii) Make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.; 
 
